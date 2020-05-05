@@ -11,15 +11,14 @@
   import { onMount } from 'svelte';
   import * as cvstfjs from '@microsoft/customvision-tfjs';
 
-  let model = new cvstfjs.ObjectDetectionModel();
+  let model
 
 
-  onMount(async() => {
+  onMount(() => {
     var video = document.createElement("video");
     var canvasElement = document.getElementById("canvas");
     var canvas = canvasElement.getContext("2d");
     var loadingMessage = document.getElementById("loadingMessage");
-    await model.loadModelAsync('__BASEURL__/model/model.json');
 
 
     // Use facingMode: environment to attemt to get the front camera on phones
@@ -28,6 +27,8 @@
       video.setAttribute("playsinline", true); // required to tell iOS safari we don't want fullscreen
       video.play();
       requestAnimationFrame(tick);
+      model = new cvstfjs.ObjectDetectionModel();
+      model.loadModelAsync('__BASEURL__/model/model.json');
     });
 
     async function tick() {
@@ -43,7 +44,7 @@
         var imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
 
         const time = new Date()
-        if (time.getSeconds() % 1 == 0) {
+        if (model && (time.getSeconds() % 1 == 0)) {
 
           const result = await model.executeAsync(imageData);
           const probs = result[1]
