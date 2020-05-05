@@ -19,7 +19,7 @@
     var canvasElement = document.getElementById("canvas");
     var canvas = canvasElement.getContext("2d");
     var loadingMessage = document.getElementById("loadingMessage");
-    await model.loadModelAsync('/model/model.json');
+    await model.loadModelAsync('__BASEURL__/model/model.json');
 
 
     // Use facingMode: environment to attemt to get the front camera on phones
@@ -48,7 +48,7 @@
           const result = await model.executeAsync(imageData);
           const probs = result[1]
           const boxes = result[0]
-          const threshold = 0.26
+          const threshold = 0.25
 
           if (probs.some(x => x > threshold)) {
             var canvasElementResult = document.getElementById("canvasResult");
