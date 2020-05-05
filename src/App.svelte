@@ -13,7 +13,6 @@
 
   let model
 
-
   onMount(() => {
     var video = document.createElement("video");
     var canvasElement = document.getElementById("canvas");
@@ -22,7 +21,7 @@
 
 
     // Use facingMode: environment to attemt to get the front camera on phones
-    navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(function(stream) {
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } }).then(function(stream) {
       video.srcObject = stream;
       video.setAttribute("playsinline", true); // required to tell iOS safari we don't want fullscreen
       video.play();
@@ -44,7 +43,7 @@
         var imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
 
         const time = new Date()
-        if (model && (time.getSeconds() % 1 == 0)) {
+        if (model && (time.getSeconds() % 2 == 0)) {
 
           const result = await model.executeAsync(imageData);
           const probs = result[1]
